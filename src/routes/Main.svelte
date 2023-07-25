@@ -6,20 +6,36 @@
 
     import type {Item} from "$lib/item";
     import {supabase} from "$lib/subabaseClient";
+    import InfiniteScroll from "./InfiniteScroll.svelte";
 
     let items = []
+    let search;
+    let page = 0;
+    let loaded = false;
+    let moreItems = true;
 
     function handleSearch(event) {
-        get_items(event.detail.text);
+        search = event.detail.text;
+        page = 0;
+        getItems(search);
+        page = 1;
     }
 
-    export async function get_items(search) {
+    function fetchMoreItems(){
+        console.log(page)
+        if (moreItems) {
+            loaded = false;
+            addItems(search);
+        }
+    }
+
+    export async function addItems(search) {
         if (search === "") {
             search = "skin"
         }
         search = search.replaceAll(" ", ":*&")
         let {data, error} = await supabase.rpc("get_item_colors_simplified",
-            {search: `${search}:*`, page: 0})
+            {search: `${search}:*`, page: page})
 
         if (error) {
             console.log(error)
@@ -30,13 +46,56 @@
                         name: entry.name,
                         priceText: entry.priceText,
                         icon_url: entry.icon_url,
-                        colors: entry.colors
+                        colors: entry.colors,
+                        type: entry.type,
+                        minFloat: Math.round(entry.min_float * 100),
+                        maxFloat: Math.round(entry.max_float * 100),
+                        rarity: entry.rarity,
+                        stattrak: entry.stattrak
+                    }
+                    res.push(item)
+                }
+            );
+
+            $: items = [...items, ...res];
+            if(res.length == 0){
+                moreItems = false;
+            }
+            loaded = true;
+            page++;
+        }
+    }
+
+    export async function getItems(search) {
+        if (search === "") {
+            search = "skin"
+        }
+        search = search.replaceAll(" ", ":*&")
+        let {data, error} = await supabase.rpc("get_item_colors_simplified",
+            {search: `${search}:*`, page: page})
+
+        if (error) {
+            console.log(error)
+        } else if (data) {
+            let res: [Item] = []
+            data.forEach(entry => {
+                    let item: Item = {
+                        name: entry.name,
+                        priceText: entry.priceText,
+                        icon_url: entry.icon_url,
+                        colors: entry.colors,
+                        type: entry.type,
+                        minFloat: Math.round(entry.min_float * 100),
+                        maxFloat: Math.round(entry.max_float * 100),
+                        rarity: entry.rarity,
+                        stattrak: entry.stattrak
                     }
                     res.push(item)
                 }
             );
 
             items = res;
+            loaded = true;
         }
     }
 </script>
@@ -49,6 +108,7 @@
     <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
         <SearchBar on:search={handleSearch} items={items}></SearchBar>
         <div class="grid xl:grid-cols-6 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-2 gap-4 mb-4">
+            <InfiniteScroll loaded={loaded} on:load={fetchMoreItems}></InfiniteScroll>
             {#await items}
                 waiting...
             {:then items}

@@ -5,4 +5,9 @@ export interface Item{
     priceText: string;
     icon_url: string;
     colors: [Color];
+    type: string;
+    minFloat: number;
+    maxFloat: number;
+    rarity: string;
+    stattrak: boolean;
 }
