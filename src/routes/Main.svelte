@@ -10,7 +10,6 @@
     let items = []
 
     function handleSearch(event) {
-        console.log(event)
         get_items(event.detail.text);
     }
 
@@ -20,7 +19,7 @@
         }
         search = search.replaceAll(" ", ":*&")
         let {data, error} = await supabase.rpc("get_item_colors_simplified",
-            {search: `${search}:*`})
+            {search: `${search}:*`, page: 0})
 
         if (error) {
             console.log(error)
