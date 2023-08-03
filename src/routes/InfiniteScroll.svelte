@@ -2,9 +2,10 @@
     import { createEventDispatcher } from "svelte";
     import { browser } from '$app/environment';
 
-    let y;
-    let height;
-    export let loaded;
+    let y: number;
+    let height: number;
+    let treshold: number = 600;
+    export let loaded: boolean;
 
     const dispatch = createEventDispatcher();
 
@@ -16,7 +17,7 @@
 
             console.log(y + " " + scrollHeight + " " + clientHeight)
 
-            if (y + clientHeight >= scrollHeight - 400 && scrollHeight != clientHeight) {
+            if (y + clientHeight >= scrollHeight - treshold && scrollHeight != clientHeight) {
                 if(loaded){
                     dispatch("load");
                 }

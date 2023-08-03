@@ -6,6 +6,7 @@ export interface Item{
     icon_url: string;
     colors: [Color];
     type: string;
+    category: string;
     minFloat: number;
     maxFloat: number;
     rarity: string;

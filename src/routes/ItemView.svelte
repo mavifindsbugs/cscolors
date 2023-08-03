@@ -1,6 +1,6 @@
 <script lang="ts">
     import type {Item} from "$lib/item.ts"
-    export let item : [Item];
+    export let item : Item;
 
     function rarityToColor(rarity: string) {
         switch(rarity){

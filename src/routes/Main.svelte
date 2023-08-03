@@ -8,33 +8,34 @@
     import {supabase} from "$lib/subabaseClient";
     import InfiniteScroll from "./InfiniteScroll.svelte";
 
-    let items = []
-    let search;
+    let items: Item[] = []
+    let search: string;
     let page = 0;
     let loaded = false;
     let moreItems = true;
 
-    function handleSearch(event) {
+    function handleSearch(event: CustomEvent) {
         search = event.detail.text;
         page = 0;
+        moreItems = true;
         getItems(search);
-        page = 1;
     }
 
     function fetchMoreItems(){
         console.log(page)
         if (moreItems) {
+            page++;
             loaded = false;
             addItems(search);
         }
     }
 
-    export async function addItems(search) {
+    export async function addItems(search: string) {
         if (search === "") {
             search = "skin"
         }
         search = search.replaceAll(" ", ":*&")
-        let {data, error} = await supabase.rpc("get_item_colors_simplified",
+        let {data, error} = await supabase.rpc("get_item_colors_v2",
             {search: `${search}:*`, page: page})
 
         if (error) {
@@ -48,8 +49,9 @@
                         icon_url: entry.icon_url,
                         colors: entry.colors,
                         type: entry.type,
-                        minFloat: Math.round(entry.min_float * 100),
-                        maxFloat: Math.round(entry.max_float * 100),
+                        category: entry.category,
+                        minFloat: entry.min_float,
+                        maxFloat: entry.max_float,
                         rarity: entry.rarity,
                         stattrak: entry.stattrak
                     }
@@ -58,20 +60,19 @@
             );
 
             $: items = [...items, ...res];
-            if(res.length == 0){
+            if(res.length < 20){
                 moreItems = false;
             }
             loaded = true;
-            page++;
         }
     }
 
-    export async function getItems(search) {
+    export async function getItems(search: string) {
         if (search === "") {
             search = "skin"
         }
         search = search.replaceAll(" ", ":*&")
-        let {data, error} = await supabase.rpc("get_item_colors_simplified",
+        let {data, error} = await supabase.rpc("get_item_colors_v2",
             {search: `${search}:*`, page: page})
 
         if (error) {
@@ -85,8 +86,9 @@
                         icon_url: entry.icon_url,
                         colors: entry.colors,
                         type: entry.type,
-                        minFloat: Math.round(entry.min_float * 100),
-                        maxFloat: Math.round(entry.max_float * 100),
+                        category: entry.category,
+                        minFloat: entry.min_float,
+                        maxFloat: entry.max_float,
                         rarity: entry.rarity,
                         stattrak: entry.stattrak
                     }
