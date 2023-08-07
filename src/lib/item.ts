@@ -11,4 +11,5 @@ export interface Item{
     maxFloat: number;
     rarity: string;
     stattrak: boolean;
+    price: number;
 }

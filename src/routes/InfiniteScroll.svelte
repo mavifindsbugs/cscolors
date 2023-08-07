@@ -15,7 +15,7 @@
             const scrollHeight = document.documentElement.scrollHeight
             const clientHeight = document.documentElement.clientHeight
 
-            console.log(y + " " + scrollHeight + " " + clientHeight)
+            // console.log(y + " " + scrollHeight + " " + clientHeight)
 
             if (y + clientHeight >= scrollHeight - treshold && scrollHeight != clientHeight) {
                 if(loaded){
