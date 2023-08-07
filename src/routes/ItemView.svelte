@@ -43,7 +43,7 @@
 <div class="w-72 h-56 relative p-8 justify-center justify-self-center mx-auto">
     <div class="w-72 h-56 left-0 top-0 absolute bg-white dark:bg-gray-700 rounded"></div>
     <div class="w-64 h-8 left-[10px] top-[162px] absolute text-sm font-semibold" style="color: {rarityToColor(item.rarity)}">{item.rarity}</div>
-    <div class="w-48 h-8 left-[10px] top-[180px] absolute text-sm font-semibold text-gray-900 rounded-lg dark:text-white">{item.name}</div>
+    <a href={"https://steamcommunity.com/market/search?appid=730&q=" + item.name} class="w-48 h-8 left-[10px] top-[180px] absolute text-sm font-semibold text-gray-900 rounded-lg dark:text-white">{item.name}</a>
     {#if item.price != null}
     <div class="w-32 h-8 left-[150px] top-[180px] absolute text-sm rounded-lg dark:text-green-300 text-right font-medium text-green-500">{item.price.toFixed(2)}$</div>
     {/if}
