@@ -27,6 +27,8 @@
                 return "#8e44e2"
             case "High Grade":
                 return "#332cf5"
+            case "Base Grade":
+                return "#7194d9"
             default:
                 return "#ed9a15"
         }
@@ -45,7 +47,7 @@
     <div class="w-64 h-8 left-[10px] top-[162px] absolute text-sm font-semibold" style="color: {rarityToColor(item.rarity)}">{item.rarity}</div>
     <a href={"https://steamcommunity.com/market/search?appid=730&q=" + item.name} class="w-48 h-8 left-[10px] top-[180px] absolute text-sm font-semibold text-gray-900 rounded-lg dark:text-white">{item.name}</a>
     {#if item.price != null}
-    <div class="w-32 h-8 left-[150px] top-[180px] absolute text-sm rounded-lg dark:text-green-300 text-right font-medium text-green-500">{item.price.toFixed(2)}$</div>
+        <div class="w-32 h-8 left-[150px] top-[180px] absolute text-sm rounded-lg dark:text-green-300 text-right font-medium text-green-500">{item.price.toFixed(2)}$</div>
     {/if}
     <img class="w-55 h-40 left-[14px] top-[4px] absolute rounded transition hover:scale-110 active:scale-[2] active:z-50 duration-100" src={item.icon_url} alt="icon" />
    

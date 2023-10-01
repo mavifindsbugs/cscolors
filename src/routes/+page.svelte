@@ -1,5 +1,4 @@
 <script lang="ts">
-
 import Main from "./Main.svelte";
 </script>
 
@@ -13,6 +12,6 @@ import Main from "./Main.svelte";
 </style>
 
 
-<div class="bg-gray-100 dark:bg-gray-900 h-screen">
+<div class="bg-gray-100 dark:bg-gray-900 h-screen w-full">
     <Main></Main>
 </div>
