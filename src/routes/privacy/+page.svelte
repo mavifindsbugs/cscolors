@@ -12,7 +12,7 @@
 
 
 <div class="bg-gray-100 dark:bg-gray-900 mt-16 w-full">
-    <div class="bg-gray-100 dark:bg-gray-900 ml-64 mr-64 text-gray-500 dark:text-white">
+    <div class="bg-gray-100 dark:bg-gray-900 lg:ml-64 lg:mr-64 sm:ml-16 sm:mr-16 ml-8 mr-8 text-gray-500 dark:text-white">
         <p class="text-2xl font-semibold mb-12">Privacy Policy</p>
         <div class="text-gray-500 dark:text-white">
             <span class="block font-semibold mt-2">

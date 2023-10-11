@@ -13,6 +13,7 @@
     let page = 0;
     let loaded = false;
     let moreItems = true;
+    let sidebarHidden = true;
 
 
     onMount(() => {
@@ -113,10 +114,12 @@
         }
     }
 </script>
+<Navbar on:showSidebar={(e) => {sidebarHidden = !sidebarHidden}} on:search={(e) => {handleSearch(e.detail.text)}} bind:search items={items}></Navbar>
+<Sidebar bind:sidebarHidden></Sidebar>
 
-
-<Navbar on:search={(e) => {handleSearch(e.detail.text)}} bind:search items={items}></Navbar>
-<Sidebar></Sidebar>
+{#if !sidebarHidden}
+    <div class="bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-30" on:click={e => {sidebarHidden=true}}></div>
+{/if}
 
 <div class="p-4 sm:ml-48 bg-gray-100 dark:bg-gray-900">
     <div class="mt-16 w-full grid place-items-center">
