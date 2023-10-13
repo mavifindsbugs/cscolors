@@ -15,17 +15,33 @@
     let moreItems = true;
     let sidebarHidden = true;
 
+    let sidebarSelection: string = "";
+
 
     onMount(() => {
         handleSearch("")
     })
 
+    function convertToType(s: string) {
+        switch (s){
+            case "Skins": return "skin";
+            case "Sticker": return "sticker";
+            case "Graffiti": return "graffiti";
+            case "All": return "";
+            default: return "";
+        }
+    }
+
+    function selectSidebar(s: string) {
+        sidebarSelection = s
+        handleSearch(search);
+    }
+
     function handleSearch(s: string) {
         search = s
         page = 0;
         moreItems = true;
-        // items = []
-        getItems(search);
+        getItems(search, false, convertToType(sidebarSelection));
         backToTop()
     }
 
@@ -33,7 +49,7 @@
         if (moreItems) {
             page++;
             loaded = false;
-            addItems(search);
+            getItems(search, true, convertToType(sidebarSelection));
         }
     }
 
@@ -41,16 +57,12 @@
         window.scrollTo(0,0)
     }
 
-    export async function addItems(search: string) {
-        if (search === "") {
-            search = "skin"
-        }
-        search = search.replaceAll(" ", ":*&")
-        let {data, error} = await supabase.rpc("get_item_colors_v2",
-            {search: `${search}:*`, page: page})
+    export async function getItems(search: string, append: boolean = false, category: string = "") {
+        let {data, error} = await supabase.rpc("get_item_colors_v3",
+            {search: `${search}`, page: page, search_category: category.toLowerCase()})
 
         if (error) {
-            console.log(error)
+            //console.log(error)
         } else if (data) {
             let res: [Item] = []
             data.forEach(entry => {
@@ -71,51 +83,23 @@
                 }
             );
 
-            $: items = [...items, ...res];
-            if(res.length < 20){
-                moreItems = false;
+            if (append) {
+                $: items = [...items, ...res];
+                if(res.length < 20){
+                    moreItems = false;
+                }
+            }
+            else {
+                items = res;
             }
             loaded = true;
         }
     }
-
-    export async function getItems(search: string) {
-        if (search === "") {
-            search = "skin"
-        }
-        search = search.replaceAll(" ", ":*&")
-        let {data, error} = await supabase.rpc("get_item_colors_v2",
-            {search: `${search}:*`, page: page})
-
-        if (error) {
-            console.log(error)
-        } else if (data) {
-            let res: [Item] = []
-            data.forEach(entry => {
-                    let item: Item = {
-                        name: entry.name,
-                        priceText: entry.priceText,
-                        icon_url: entry.icon_url,
-                        colors: entry.colors,
-                        type: entry.type,
-                        category: entry.category,
-                        minFloat: entry.min_float,
-                        maxFloat: entry.max_float,
-                        rarity: entry.rarity,
-                        stattrak: entry.stattrak,
-                        price: entry.price
-                    }
-                    res.push(item)
-                }
-            );
-
-            items = res;
-            loaded = true;
-        }
-    }
 </script>
-<Navbar on:showSidebar={(e) => {sidebarHidden = !sidebarHidden}} on:search={(e) => {handleSearch(e.detail.text)}} bind:search items={items}></Navbar>
-<Sidebar bind:sidebarHidden></Sidebar>
+
+
+<Navbar on:showSidebar={(e) => {sidebarHidden = !sidebarHidden}} on:search={(e) => {handleSearch(e.detail.text)}} bind:search></Navbar>
+<Sidebar selection={sidebarSelection} bind:sidebarHidden on:sidebarSelect={(e) => {selectSidebar(e.detail.text)}}></Sidebar>
 
 {#if !sidebarHidden}
     <div class="bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-30" on:click={e => {sidebarHidden=true}}></div>
