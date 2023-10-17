@@ -59,8 +59,7 @@
 
     export async function getItems(search: string, append: boolean = false, category: string = "") {
         let {data, error} = await supabase.rpc("get_item_colors_v3",
-            {search: `${search}`, page: page, search_category: category.toLowerCase()})
-
+            {search: `${search}`, page: page, search_category: category.toLowerCase(), sort_order: true})
         if (error) {
             //console.log(error)
         } else if (data) {
