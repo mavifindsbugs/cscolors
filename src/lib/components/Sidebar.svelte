@@ -13,7 +13,8 @@
 	let sortOptions = [
 		'Color',
 		'Price',
-		'Name'
+		'Name',
+        'Color Match'
 	]
 
     export let selectedOrder: string;
