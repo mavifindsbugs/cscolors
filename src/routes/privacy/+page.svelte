@@ -1,6 +1,10 @@
 <script lang="ts">
 </script>
 
+<svelte:head>
+	<title>CS Colors - Privacy Policy</title>
+</svelte:head>
+
 <style>
     :global(body) {
         background-color: rgb(243 244 246);
