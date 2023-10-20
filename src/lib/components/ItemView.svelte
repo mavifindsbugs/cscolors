@@ -19,6 +19,8 @@
                 return "#8e44e2"
             case "Industrial Grade":
                 return  "#7194d9"
+            case "Consumer Grade":
+                return "#94a5b3"
             case "Extraordinary":
                 return "#eb3636"
             case "Exotic":

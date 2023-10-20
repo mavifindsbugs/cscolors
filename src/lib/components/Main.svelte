@@ -2,6 +2,7 @@
     import Navbar from "./Navbar.svelte";
     import Sidebar from "./Sidebar.svelte";
     import ItemView from "./ItemView.svelte";
+    import { browser } from '$app/environment';
 
     import type {Item} from "$lib/item";
     import {supabase} from "$lib/subabaseClient";
@@ -16,6 +17,8 @@
     let sidebarHidden = true;
 
     let sidebarSelection: string = "";
+    let selectedSort: string = "Color"
+    let selectedOrder: string = "descending"
 
 
     onMount(() => {
@@ -37,11 +40,11 @@
         handleSearch(search);
     }
 
-    function handleSearch(s: string) {
+    function handleSearch(s: string, sortOrder: boolean = true) {
         search = s
         page = 0;
         moreItems = true;
-        getItems(search, false, convertToType(sidebarSelection));
+        getItems(search, false, convertToType(sidebarSelection), sortOrder);
         backToTop()
     }
 
@@ -54,12 +57,14 @@
     }
 
     function backToTop(){
-        window.scrollTo(0,0)
+        if (browser) {
+            window.scrollTo(0,0)
+        }
     }
 
     export async function getItems(search: string, append: boolean = false, category: string = "") {
-        let {data, error} = await supabase.rpc("get_item_colors_v3",
-            {search: `${search}`, page: page, search_category: category.toLowerCase(), sort_order: true})
+        let {data, error} = await supabase.rpc("get_item_colors_v4",
+            {search: `${search}`, page: page, search_category: category.toLowerCase(), sort_order: selectedOrder == "ascending", sort: selectedSort.toLowerCase()})
         if (error) {
             //console.log(error)
         } else if (data) {
@@ -94,11 +99,17 @@
             loaded = true;
         }
     }
+
+    $:  {
+        let _ = selectedOrder + selectedSort
+        handleSearch(search)
+    }
+
 </script>
 
 
 <Navbar on:showSidebar={(e) => {sidebarHidden = !sidebarHidden}} on:search={(e) => {handleSearch(e.detail.text)}} bind:search></Navbar>
-<Sidebar selection={sidebarSelection} bind:sidebarHidden on:sidebarSelect={(e) => {selectSidebar(e.detail.text)}}></Sidebar>
+<Sidebar selection={sidebarSelection} bind:selectedSort bind:selectedOrder bind:sidebarHidden on:sidebarSelect={(e) => {selectSidebar(e.detail.text)}}></Sidebar>
 
 {#if !sidebarHidden}
     <div class="bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-30" on:click={e => {sidebarHidden=true}}></div>
