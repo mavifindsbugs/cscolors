@@ -110,7 +110,6 @@
 
 <svelte:head>
 	<title>CS Colors</title>
-    <meta name="description" content="A search engine for CS Skins and Stickers with support for colors">
 </svelte:head>
 
 <Navbar on:showSidebar={(e) => {sidebarHidden = !sidebarHidden}} on:search={(e) => {handleSearch(e.detail.text)}} bind:search></Navbar>
