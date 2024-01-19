@@ -4,7 +4,7 @@
 
     let y: number;
     let height: number;
-    let treshold: number = 600;
+    let threshold: number = 600;
     export let loaded: boolean;
 
     const dispatch = createEventDispatcher();
@@ -17,7 +17,7 @@
 
             // console.log(y + " " + scrollHeight + " " + clientHeight)
 
-            if (y + clientHeight >= scrollHeight - treshold && scrollHeight != clientHeight) {
+            if (y + clientHeight >= scrollHeight - threshold && scrollHeight != clientHeight) {
                 if(loaded){
                     dispatch("load");
                 }

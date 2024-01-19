@@ -6,6 +6,6 @@
             <a href="/privacy" class="hover:underline">Privacy Policy</a>
         </li>
     </ul>
-    <p class="text-xs text-gray-500 dark:text-gray-400">© 2023 <a href="https://github.com/mavifindsbugs" class="hover:underline">mavifindsbugs</a></p>
+    <p class="text-xs text-gray-500 dark:text-gray-400">© 2024 <a href="https://github.com/mavifindsbugs" class="hover:underline">mavifindsbugs</a></p>
     </div>
 </footer>

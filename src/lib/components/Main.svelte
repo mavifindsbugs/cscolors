@@ -89,7 +89,7 @@
 
             if (append) {
                 $: items = [...items, ...res];
-                if(res.length < 20){
+                if(res.length < 25){
                     moreItems = false;
                 }
             }
