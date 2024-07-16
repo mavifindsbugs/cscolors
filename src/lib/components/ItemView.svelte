@@ -149,7 +149,7 @@
                 {#if i <= 4}
                     <div class="group">
                         <p>{i}</p>
-                        <div class="w-48 ml-14 h-0 absolute text-sm font-semibold text-right text-gray-900 rounded-lg dark:text-white">{price.condition}:
+                        <div class="w-48 ml-14 h-0 mt-1 absolute text-sm font-semibold text-right text-gray-900 rounded-lg dark:text-white">{price.condition}:
                             <span class="rounded-lg dark:text-green-300 font-medium text-green-500">{price.value.toFixed(2)}$</span>
                         </div>
                     </div>

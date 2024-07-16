@@ -103,7 +103,9 @@
 
     $:  {
         let _ = selectedOrder + selectedSort
-        handleSearch(search)
+        if(search != undefined){
+            handleSearch(search);
+        }
     }
 
 </script>
@@ -127,7 +129,7 @@
     </div>
     <div class="w-full grid place-items-center">
     <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
-        <div class="grid min-[1800px]:grid-cols-5 min-[1600px]:grid-cols-4 min-[1200px]:grid-cols-3 min-[950px]:grid-cols-2 grid-cols-1 gap-4 mb-4 m-auto justify-center ">
+        <div class="grid min-[3400px]:grid-cols-8 min-[3000px]:grid-cols-7 min-[2600px]:grid-cols-7 min-[2200px]:grid-cols-6 min-[1800px]:grid-cols-5 min-[1600px]:grid-cols-4 min-[1200px]:grid-cols-3 min-[950px]:grid-cols-2 grid-cols-1 gap-4 mb-4 m-auto justify-center ">
             <InfiniteScroll loaded={loaded} on:load={fetchMoreItems}></InfiniteScroll>
                 {#await items}
                     waiting...
@@ -140,6 +142,9 @@
                 {/await}
         </div>
     </div>
+        <button on:click={fetchMoreItems} class="bottom-4 right-4 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg text-sm p-2.5">
+            <p>LOAD MORE ... </p>
+        </button>
     </div>
     <button on:click={backToTop} class="fixed bottom-4 right-4 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg text-sm p-2.5">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
