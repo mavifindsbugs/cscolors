@@ -16,6 +16,14 @@ Curious about how the search works? Here are some examples:
  * blue usp skin
  * ...
 
+## Development
+
+### How to build
+You only need to run:
+`npm run dev`
+
+Make sure you have set the SUPABASE environment variables in a '.env.local' file.
+
 ## Notes
 
 This is my first time working with Svelte. I created this for fun, the code is horrible but at least it's fast :)
