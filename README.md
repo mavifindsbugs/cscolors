@@ -18,11 +18,15 @@ Curious about how the search works? Here are some examples:
 
 ## Development
 
-### How to build
-You only need to run:
-`npm run dev`
+### Supabase Backend
 
-Make sure you have set the SUPABASE environment variables in a '.env.local' file.
+This project uses a Supabase Backend. Make sure you have set up the corresponding Supabase environment variables in the `.env.local` file.
+You can use the official public `PUBLIC_SUPABASE_URL` and `PUBLIC_SUPABASE_KEY` environment variables for this.
+### How to build and run
+Run `npm install` in order to install all necessary dependencies.
+
+After that you can simply run `npm run dev`
+
 
 ## Notes
 
