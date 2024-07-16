@@ -118,7 +118,7 @@
 
         {#if item.type === "skin"}
 
-            <div class="absolute left-[10px] top-[100px] w-full bg-gray-200 h-3.5 mb-4 dark:bg-gray-300 w-20">
+            <div class="absolute left-[10px] top-[100px] bg-gray-200 h-3.5 mb-4 dark:bg-gray-300 w-20">
                     <div class="bg-green-600 border-2 h-3.5" style="left: {item.minFloat}%; width: {item.maxFloat - item.minFloat}%">
                         <span class="absolute -top-[16px] text-xs text-black dark:text-white" style="left: {item.minFloat}%">{item.minFloat}</span>
                         <span class="absolute -top-[16px] text-xs text-black dark:text-white" style="left: {item.maxFloat - item.minFloat}%">{item.maxFloat}</span>
