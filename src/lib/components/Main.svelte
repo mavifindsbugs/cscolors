@@ -63,7 +63,7 @@
     }
 
     export async function getItems(search: string, append: boolean = false, category: string = "") {
-        let {data, error} = await supabase.rpc("get_item_colors_v4",
+        let {data, error} = await supabase.rpc("get_item_colors_v5",
             {search: `${search}`, page: page, search_category: category.toLowerCase(), sort_order: selectedOrder == "ascending", sort: selectedSort.toLowerCase()})
         if (error) {
             //console.log(error)
@@ -81,6 +81,7 @@
                         maxFloat: entry.max_float,
                         rarity: entry.rarity,
                         stattrak: entry.stattrak,
+                        souvenir: entry.souvenir,
                         price: entry.price
                     }
                     res.push(item)

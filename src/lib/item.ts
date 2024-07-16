@@ -12,4 +12,13 @@ export interface Item{
     rarity: string;
     stattrak: boolean;
     price: number;
+    prices: [Price];
+}
+
+export interface Price{
+    name: string,
+    condition: string;
+    souuvenir: boolean;
+    stattrak: boolean;
+    value: number;
 }
