@@ -4,12 +4,12 @@
     import ItemView from "./ItemView.svelte";
     import { browser } from '$app/environment';
 
-    import type {Item} from "$lib/item";
+    import type {Item, Crate} from "$lib/item";
     import {supabase} from "$lib/subabaseClient";
     import InfiniteScroll from "./InfiniteScroll.svelte";
 	import { onMount } from "svelte";
 
-    let items: Item[] = []
+    let items: (Item | Crate)[] = []
     let search: string;
     let page = 0;
     let loaded = false;
@@ -19,6 +19,7 @@
     let sidebarSelection: string = "";
     let selectedSort: string = "Color"
     let selectedOrder: string = "descending"
+    let selectedVariant: string = "";
 
 
     onMount(() => {
@@ -30,21 +31,53 @@
             case "Skins": return "skin";
             case "Sticker": return "sticker";
             case "Graffiti": return "graffiti";
+            case "Crates": return "cases";
             case "All": return "";
             default: return "";
         }
     }
 
     function selectSidebar(s: string) {
+        if (s === "Crates") {
+            // Don't change selection or trigger search when just opening Crates
+            return;
+        }
         sidebarSelection = s
+        selectedVariant = "";
         handleSearch(search);
     }
 
-    function handleSearch(s: string, sortOrder: boolean = true) {
+    function selectVariant() {
+        sidebarSelection = "Crates";
+        search = "";
+        handleSearch(search);
+    }
+
+    function handleCrateClick(crate: Crate) {
+        sidebarSelection = "All";
+        let wasCase = selectedVariant === "Case";
+        selectedVariant = "";
+        // Set sort to rarity when clicking on a crate
+        selectedSort = "Rarity";
+        selectedOrder = "descending";
+        // Remove special characters and CS:GO prefix that might break the search
+        let cleanName = crate.name.replace(/CS:GO\s*/g, '').replace(/[|:&]/g, '').trim();
+        if (wasCase) {
+            search = cleanName + " !knives";
+        } else {
+            search = cleanName;
+        }
+    }
+
+    function handleSearch(s: string) {
         search = s
         page = 0;
         moreItems = true;
-        getItems(search, false, convertToType(sidebarSelection), sortOrder);
+        if (sidebarSelection === "Crates") {
+            getCrates(search, false, selectedVariant);
+        } else {
+            getItems(search, false, convertToType(sidebarSelection));
+        }
         backToTop()
     }
 
@@ -52,7 +85,11 @@
         if (moreItems) {
             page++;
             loaded = false;
-            getItems(search, true, convertToType(sidebarSelection));
+            if (sidebarSelection === "Crates") {
+                getCrates(search, true, selectedVariant);
+            } else {
+                getItems(search, true, convertToType(sidebarSelection));
+            }
         }
     }
 
@@ -62,14 +99,45 @@
         }
     }
 
+    async function getCrates(search: string, append: boolean = false, variant: string = "") {
+        let {data, error} = await supabase.rpc("get_crates_v3",
+            {search: `${search}`, variant_input: variant, page: page, sort_order: selectedOrder == "ascending", sort: selectedSort.toLowerCase()})
+        if (error) {
+            console.log(error)
+        } else if (data) {
+            let res: Crate[] = []
+            data.forEach((entry: any) => {
+                    let crate: Crate = {
+                        name: entry.name,
+                        icon_url: entry.icon_url,
+                        variant: entry.variant,
+                        price: entry.price
+                    }
+                    res.push(crate)
+                }
+            );
+
+            if (append) {
+                items = [...items, ...res];
+                if(res.length < 25){
+                    moreItems = false;
+                }
+            }
+            else {
+                items = res;
+            }
+            loaded = true;
+        }
+    }
+
     export async function getItems(search: string, append: boolean = false, category: string = "") {
         let {data, error} = await supabase.rpc("get_item_colors_v5",
             {search: `${search}`, page: page, search_category: category.toLowerCase(), sort_order: selectedOrder == "ascending", sort: selectedSort.toLowerCase()})
         if (error) {
             //console.log(error)
         } else if (data) {
-            let res: [Item] = []
-            data.forEach(entry => {
+            let res: Item[] = []
+            data.forEach((entry: any) => {
                     let item: Item = {
                         name: entry.name,
                         priceText: entry.priceText,
@@ -89,7 +157,7 @@
             );
 
             if (append) {
-                $: items = [...items, ...res];
+                items = [...items, ...res];
                 if(res.length < 25){
                     moreItems = false;
                 }
@@ -102,7 +170,7 @@
     }
 
     $:  {
-        let _ = selectedOrder + selectedSort
+        let _ = selectedOrder + selectedSort + selectedVariant + search
         if(search != undefined){
             handleSearch(search);
         }
@@ -116,7 +184,7 @@
 </svelte:head>
 
 <Navbar on:showSidebar={(e) => {sidebarHidden = !sidebarHidden}} on:search={(e) => {handleSearch(e.detail.text)}} bind:search></Navbar>
-<Sidebar selection={sidebarSelection} bind:selectedSort bind:selectedOrder bind:sidebarHidden on:sidebarSelect={(e) => {selectSidebar(e.detail.text)}}></Sidebar>
+<Sidebar selection={sidebarSelection} bind:selectedSort bind:selectedOrder bind:selectedVariant bind:sidebarHidden on:sidebarSelect={(e) => {selectSidebar(e.detail.text)}} on:variantSelect={selectVariant}></Sidebar>
 
 {#if !sidebarHidden}
     <div class="bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-30" on:click={e => {sidebarHidden=true}}></div>
@@ -135,7 +203,7 @@
                     waiting...
                 {:then items}
                     {#each items as item (item)}
-                        <ItemView on:color_click={(e) => {handleSearch(e.detail.text)}} item={item}></ItemView>
+                        <ItemView on:color_click={(e) => {handleSearch(e.detail.text)}} on:crate_click={(e) => {handleCrateClick(e.detail.crate)}} item={item}></ItemView>
                     {/each}
                 {:catch error}
                     <p style="color: red">{error.message}</p>

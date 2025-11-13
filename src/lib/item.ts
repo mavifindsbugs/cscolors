@@ -11,14 +11,22 @@ export interface Item{
     maxFloat: number;
     rarity: string;
     stattrak: boolean;
+    souvenir: boolean;
     price: number;
-    prices: [Price];
+    prices?: Price[];
+}
+
+export interface Crate{
+    name: string;
+    icon_url: string;
+    variant?: string;
+    price?: number;
 }
 
 export interface Price{
     name: string,
     condition: string;
-    souuvenir: boolean;
+    souvenir: boolean;
     stattrak: boolean;
     value: number;
 }
