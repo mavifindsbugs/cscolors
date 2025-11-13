@@ -3,6 +3,7 @@
     import Sidebar from "./Sidebar.svelte";
     import ItemView from "./ItemView.svelte";
     import { browser } from '$app/environment';
+    import { trackEvent } from '$lib/analytics';
 
     import type {Item, Crate} from "$lib/item";
     import {supabase} from "$lib/subabaseClient";
@@ -44,12 +45,16 @@
         }
         sidebarSelection = s
         selectedVariant = "";
+        // Track tab selection
+        trackEvent('tab-selected', { tab: s });
         handleSearch(search);
     }
 
     function selectVariant() {
         sidebarSelection = "Crates";
         search = "";
+        // Track variant selection
+        trackEvent('variant-selected', { variant: selectedVariant });
         handleSearch(search);
     }
 
@@ -62,6 +67,8 @@
         selectedOrder = "descending";
         // Remove special characters and CS:GO prefix that might break the search
         let cleanName = crate.name.replace(/CS:GO\s*/g, '').replace(/[|:&]/g, '').trim();
+        // Track crate click
+        trackEvent('crate-clicked', { crate: cleanName, wasCase });
         if (wasCase) {
             search = cleanName + " !knives";
         } else {
@@ -79,6 +86,12 @@
             getItems(search, false, convertToType(sidebarSelection));
         }
         backToTop()
+    }
+
+    function handleColorClick(color: string) {
+        // Track color search
+        trackEvent('color-search', { color });
+        handleSearch(color);
     }
 
     function fetchMoreItems(){
@@ -203,7 +216,7 @@
                     waiting...
                 {:then items}
                     {#each items as item (item)}
-                        <ItemView on:color_click={(e) => {handleSearch(e.detail.text)}} on:crate_click={(e) => {handleCrateClick(e.detail.crate)}} item={item}></ItemView>
+                        <ItemView on:color_click={(e) => {handleColorClick(e.detail.text)}} on:crate_click={(e) => {handleCrateClick(e.detail.crate)}} item={item}></ItemView>
                     {/each}
                 {:catch error}
                     <p style="color: red">{error.message}</p>

@@ -20,7 +20,7 @@
         <p class="text-2xl font-semibold mb-12">Privacy Policy</p>
         <div class="text-gray-500 dark:text-white">
             <span class="block font-semibold mt-2">
-                Last updated: October 1, 2023
+                Last updated: November 13, 2025
             </span>
 
             <span class="block">
@@ -30,7 +30,7 @@
                 1. Information We Collect
             </span>
             <span class="block">
-                We do not collect any personal information directly from you when you visit our Website. We do not use cookies or other tracking technologies.
+                We collect minimal, non-personally identifiable information to improve our website and understand how visitors use it. This includes anonymous analytics data such as page views and feature interactions. We do not collect any personal information that can identify you.
             </span>
             <span class="block font-bold mt-2">
             2. Third-Party Services
@@ -49,6 +49,13 @@
                 We use Netlify, another third-party service, to deploy and manage our website. Netlify provides the hosting and content delivery network (CDN) services that allow our website to be accessible to users around the world. Netlify may collect certain information about your interactions with our website as described in their own privacy policy. We recommend reviewing Netlify's Privacy Policy to understand how they collect, use, and disclose your information.
                 
                 [<a class="hover:underline" href="https://www.netlify.com/privacy/">https://www.netlify.com/privacy/</a>]
+                </span>
+
+                <span class="font-semibold">2.3 Umami Analytics</span>
+                <span class="block">
+                We use Umami, a privacy-focused analytics service, to collect anonymous usage data about our website. Umami helps us understand how visitors interact with our site by tracking events such as page views and feature usage. Importantly, Umami does not use cookies, does not collect any personally identifiable information, and does not track users across different websites. All data collected by Umami is anonymized and aggregated. Your IP address is not stored and cannot be used to identify you. For more information about how Umami processes data, please review their privacy policy.
+                
+                [<a class="hover:underline" href="https://umami.is/privacy">https://umami.is/privacy</a>]
                 </span>
             </span>
             <span class="block font-bold mt-2">
